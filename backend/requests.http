@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:4100/api
+@password = {{$dotenv SEED_STAFF_PASSWORD}}
+
+### Login as facilitator
+# @name facilitatorLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "facilitator@talentology.demo", "password": "{{password}}" }
+
+### Login as manager
+# @name managerLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "manager@talentology.demo", "password": "{{password}}" }
+
+### Wrong password → 401
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "manager@talentology.demo", "password": "wrong" }
+
+@facilitatorToken = {{facilitatorLogin.response.body.accessToken}}
+@managerToken = {{managerLogin.response.body.accessToken}}
+
+### List participants without a token → 401
+GET {{baseUrl}}/participants
+
+### List participants (facilitator)
+GET {{baseUrl}}/participants
+Authorization: Bearer {{facilitatorToken}}
+
+### Invite a participant (run twice → 409)
+# @name invite
+POST {{baseUrl}}/participants
+Authorization: Bearer {{facilitatorToken}}
+Content-Type: application/json
+
+{ "name": "Test Candidate", "email": "test.candidate@example.com" }
+
+@inviteToken = {{invite.response.body.inviteToken}}
+@participantId = {{invite.response.body.id}}
+
+### Get the assessment (words are shuffled, no dimension field)
+GET {{baseUrl}}/assessment/{{inviteToken}}
+
+### Submit with a missing group → 400
+POST {{baseUrl}}/assessment/{{inviteToken}}/submit
+Content-Type: application/json
+
+{ "groups": [{ "groupId": 1, "wordIds": [1, 2, 3, 4] }] }
+
+### Result before completing → 404
+GET {{baseUrl}}/assessment/{{inviteToken}}/result
+
+### Participant full report (facilitator)
+GET {{baseUrl}}/participants/{{participantId}}
+Authorization: Bearer {{facilitatorToken}}
+
+### Dashboard as facilitator → 403
+GET {{baseUrl}}/dashboard/summary
+Authorization: Bearer {{facilitatorToken}}
+
+### Dashboard as manager
+GET {{baseUrl}}/dashboard/summary
+Authorization: Bearer {{managerToken}}

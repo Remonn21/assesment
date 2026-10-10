@@ -1,0 +1,74 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  FACILITATOR
+  MANAGER
+}
+
+enum Dimension {
+  D
+  I
+  S
+  C
+}
+
+model User {
+  id           String @id @default(cuid())
+  email        String @unique
+  name         String
+  passwordHash String
+  role         Role
+}
+
+model WordGroup {
+  id       Int    @id @default(autoincrement())
+  position Int    @unique
+  words    Word[]
+}
+
+model Word {
+  id        Int       @id @default(autoincrement())
+  text      String
+  dimension Dimension
+  groupId   Int
+  group     WordGroup @relation(fields: [groupId], references: [id])
+}
+
+model Profile {
+  code        String   @id
+  name        String
+  description String?
+  keywords    String[]
+  results     Result[]
+}
+
+model Participant {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  inviteToken String   @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  result      Result?
+}
+
+model Result {
+  id            String      @id @default(cuid())
+  participantId String      @unique
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  scoreD        Int
+  scoreI        Int
+  scoreS        Int
+  scoreC        Int
+  profileCode   String
+  profile       Profile     @relation(fields: [profileCode], references: [code])
+  rankings      Json
+  completedAt   DateTime    @default(now())
+}

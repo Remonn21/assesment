@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.next/
+.env
+*.tsbuildinfo
+backend/src/generated/
+*.xlsx
