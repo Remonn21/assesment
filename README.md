@@ -14,7 +14,7 @@ Backend:
 
 ```bash
 cd backend
-cp .env.example .env   # set DATABASE_URL, JWT_SECRET, SEED_STAFF_PASSWORD
+cp .env.example .env   # set DATABASE_URL and JWT_SECRET
 npm install
 npm run db:migrate
 npm run db:seed
@@ -39,7 +39,7 @@ Tests: `cd backend && npm test`
 | Manager | admin@testing.com |
 | Facilitator | facilitator@testing.com |
 
-Password is whatever `SEED_STAFF_PASSWORD` is set to. The seed also adds 8 sample participants (5 completed).
+Password: `123123` (change it with `SEED_STAFF_PASSWORD` before seeding). The seed also adds 8 sample participants (5 completed).
 
 Participants don't log in, they open their personal invite link (`/assessment/<token>`), copied from the participants page.
 

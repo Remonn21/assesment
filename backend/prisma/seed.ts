@@ -45,8 +45,7 @@ async function seedWordGroups() {
 }
 
 async function seedStaff() {
-  const password = process.env.SEED_STAFF_PASSWORD;
-  if (!password) throw new Error('SEED_STAFF_PASSWORD is required');
+  const password = process.env.SEED_STAFF_PASSWORD || '123123';
   const passwordHash = await bcrypt.hash(password, 10);
   const staff = [
     {
