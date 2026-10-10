@@ -18,7 +18,7 @@ export function scoreRankedGroups(
 }
 
 export function rankDimensions(scores: DimensionScores): Dimension[] {
-  // Array#sort is stable, so equal scores keep TIE_BREAK_ORDER (D > I > S > C).
+  // Array sort is stable so equal scores keep TIE_BREAK_ORDER (D > I > S > C).
   return [...TIE_BREAK_ORDER].sort((a, b) => scores[b] - scores[a]);
 }
 

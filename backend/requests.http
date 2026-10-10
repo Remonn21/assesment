@@ -6,20 +6,20 @@
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
-{ "email": "facilitator@talentology.demo", "password": "{{password}}" }
+{ "email": "facilitator@testing.com", "password": "{{password}}" }
 
 ### Login as manager
 # @name managerLogin
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
-{ "email": "manager@talentology.demo", "password": "{{password}}" }
+{ "email": "admin@testing.com", "password": "{{password}}" }
 
 ### Wrong password → 401
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
-{ "email": "manager@talentology.demo", "password": "wrong" }
+{ "email": "admin@testing.com", "password": "wrong" }
 
 @facilitatorToken = {{facilitatorLogin.response.body.accessToken}}
 @managerToken = {{managerLogin.response.body.accessToken}}
@@ -37,7 +37,7 @@ POST {{baseUrl}}/participants
 Authorization: Bearer {{facilitatorToken}}
 Content-Type: application/json
 
-{ "name": "Test Candidate", "email": "test.candidate@example.com" }
+{ "name": "Test Candidate", "email": "test.candidate@testing.com" }
 
 @inviteToken = {{invite.response.body.inviteToken}}
 @participantId = {{invite.response.body.id}}

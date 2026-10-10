@@ -9,7 +9,7 @@ import {
   rankDimensions,
   scoreRankedGroups,
 } from '../src/disc/disc-scoring';
-import { DEMO_PARTICIPANTS } from './data/demo-participants';
+import { SAMPLE_PARTICIPANTS } from './data/sample-participants';
 import { DISC_GROUPS } from './data/disc-groups';
 import { DISC_PROFILES } from './data/disc-profiles';
 
@@ -50,13 +50,13 @@ async function seedStaff() {
   const passwordHash = await bcrypt.hash(password, 10);
   const staff = [
     {
-      email: 'facilitator@talentology.demo',
-      name: 'Demo Facilitator',
+      email: 'facilitator@testing.com',
+      name: 'Remon Ehab',
       role: 'FACILITATOR' as const,
     },
     {
-      email: 'manager@talentology.demo',
-      name: 'Demo Manager',
+      email: 'admin@testing.com',
+      name: 'Remon Ehab',
       role: 'MANAGER' as const,
     },
   ];
@@ -64,17 +64,17 @@ async function seedStaff() {
     await prisma.user.upsert({
       where: { email: user.email },
       create: { ...user, passwordHash },
-      update: { passwordHash },
+      update: { name: user.name, passwordHash },
     });
   }
 }
 
-async function seedDemoParticipants() {
+async function seedSampleParticipants() {
   const groups = await prisma.wordGroup.findMany({
     orderBy: { position: 'asc' },
     include: { words: true },
   });
-  for (const { name, email, completed } of DEMO_PARTICIPANTS) {
+  for (const { name, email, completed } of SAMPLE_PARTICIPANTS) {
     const participant = await prisma.participant.upsert({
       where: { email },
       create: { name, email },
@@ -111,7 +111,7 @@ async function main() {
   await seedProfiles();
   await seedWordGroups();
   await seedStaff();
-  await seedDemoParticipants();
+  await seedSampleParticipants();
 }
 
 main()
