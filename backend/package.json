@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "prisma generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"prisma/**/*.ts\"",
     "start": "nest start",
@@ -65,5 +66,8 @@
     "esbuild@0.28.2": true,
     "@parcel/watcher": false,
     "unrs-resolver": false
+  },
+  "engines": {
+    "node": ">=22.12"
   }
 }
